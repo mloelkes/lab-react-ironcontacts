@@ -3,7 +3,7 @@ import './App.css';
 import Contacts from './contacts.json';
 
 const allContacts = Contacts;
-const firstFiveContacts = allContacts.slice(0,5);
+const firstFiveContacts = Contacts.slice(0,5);
 
 function App() {
   const [contacts, setContacts] = useState(firstFiveContacts);
@@ -15,17 +15,25 @@ function App() {
   };
 
   const sortByPopularity = () => {
-    let sortedContacts = contacts.sort(function (a, b) {
+    let sortedContacts = contacts.slice().sort(function (a, b) {
       return a.popularity > b.popularity;
     });
     setContacts([...sortedContacts]);
   };
 
   const sortByName = () => {
-    let sortedContacts = contacts.sort(function (a, b) {
+    let sortedContacts = contacts.slice().sort(function (a, b) {
       return a.name.localeCompare(b.name);
     });
     setContacts([...sortedContacts]);
+  }
+
+  const deleteContact = (id) => {
+    let filteredContacts = contacts.slice().filter(contact => {
+      return contact.id !== id;
+    });
+
+    setContacts([...filteredContacts]);
   }
 
   return (
@@ -39,6 +47,7 @@ function App() {
             <th>Popularity</th>
             <th>Won Oscar</th>
             <th>Won Emmy</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -50,6 +59,7 @@ function App() {
               <td>{contact.popularity}</td>
               <td>{contact.wonOscar ? <p>🌞</p> : <p>⚡</p>}</td>
               <td>{contact.wonEmmy ? <p>🌞</p> : <p>⚡</p>}</td>
+              <td><button onClick={() => deleteContact(contact.id)}>Delete</button></td>
             </tr>
           )
           )}
